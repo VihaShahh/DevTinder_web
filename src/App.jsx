@@ -1,16 +1,21 @@
-import NavBar from "./NavBar";
+import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Body from "./Body";
+import Login from "./Login";
+import Profile from "./Profile";
 
 function App() {
   return (
     <BrowserRouter basename="/">
       <Routes>
-        <Route path="/login" element={<div>Login Page</div>} ></Route>
-        <Route path="/test" element={<div>test Page</div>} ></Route>
+        {/* Layout Route */}
+        <Route path="/" element={<Body />}>
+          {/* Nested Routes */}
+          <Route index element={<div>Home Page</div>} />
+          <Route path="login" element={<Login />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
       </Routes>
-      <div className="p-10">
-        <NavBar />
-      </div>
     </BrowserRouter>
   );
 }
