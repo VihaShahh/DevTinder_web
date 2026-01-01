@@ -11,9 +11,8 @@ function App() {
         </div>
 
         <div className="flex gap-2">
-          {/* Search removed */}
 
-          <div className="dropdown dropdown-end">
+          <div className="dropdown dropdown-end nx-5">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <img
