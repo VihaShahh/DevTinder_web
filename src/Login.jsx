@@ -1,9 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addUser } from "./utils/userSlice";
 
 const Login = () => {
     const [emailId, setEmailId] = useState("");
     const [password, setPassword] = useState("");
+
+    const dispatch = useDispatch();
 
     const handlelogin = async () => {
         if (!emailId || !password) {
@@ -12,61 +16,30 @@ const Login = () => {
         }
 
         try {
-            // Try using the proxy first (recommended)
-            // If proxy doesn't work, the error will tell us
             const backendUrl = "/api/login";
-            console.log("Attempting login via Vite proxy:", backendUrl);
-            console.log("Frontend origin:", window.location.origin);
-            console.log("This will be proxied to: http://127.0.0.1:3000/login");
 
             const res = await axios.post(
                 backendUrl,
                 { emailId, password },
-                { 
-                    withCredentials: true, // ← important for cookies
+                {
+                    withCredentials: true,
                     headers: {
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json",
                     },
-                    timeout: 10000, // 10 second timeout
+                    timeout: 10000,
                 }
             );
 
-            console.log("Login successful:", res.data);
-            alert("Login successful!");
+            dispatch(addUser(res.data.data));
+
+
+
         } catch (error) {
             console.error("Full error object:", error);
-            console.error("Error name:", error.name);
-            console.error("Error message:", error.message);
-            console.error("Error code:", error.code);
-            
-            if (error.response) {
-                // Server responded with error
-                console.error("❌ Server error:", error.response.status, error.response.data);
-                console.error("Response headers:", error.response.headers);
-                alert(`Login failed: ${error.response.data.message || error.response.data.error || 'Unknown error'}`);
-            } else if (error.request) {
-                // Request made but no response
-                console.error("❌ No response from server");
-                console.error("Request details:", error.request);
-                console.error("Request URL:", error.config?.url);
-                console.error("Request method:", error.config?.method);
-                
-                // Check for CORS errors
-                if (error.message?.includes('CORS') || error.message?.includes('cors')) {
-                    console.error("🚨 CORS ERROR DETECTED!");
-                    console.error("Your backend CORS should allow:", window.location.origin);
-                    alert(`CORS Error! Your backend needs to allow requests from: ${window.location.origin}\n\nCheck your backend CORS configuration.`);
-                } else if (error.code === 'ERR_NETWORK' || error.code === 'ECONNREFUSED') {
-                    console.error("🚨 NETWORK ERROR - Cannot reach server");
-                    alert("Cannot connect to server. Please check:\n1. Backend is running on port 3000\n2. Backend CORS allows: " + window.location.origin + "\n3. No firewall blocking the connection");
-                } else {
-                    alert("Cannot connect to server. Error: " + (error.message || error.code || 'Unknown error'));
-                }
-            } else {
-                // Something else happened
-                console.error("❌ Error:", error.message);
-                alert(`Error: ${error.message}`);
-            }
+            console.error("Axios error message:", error.message);
+            console.error("Response:", error.response);
+            console.error("Request:", error.request);
+
         }
     };
 

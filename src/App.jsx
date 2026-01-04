@@ -3,20 +3,24 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Body from "./Body";
 import Login from "./Login";
 import Profile from "./Profile";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
 
 function App() {
   return (
-    <BrowserRouter basename="/">
-      <Routes>
-        {/* Layout Route */}
-        <Route path="/" element={<Body />}>
-          {/* Nested Routes */}
-          <Route index element={<div>Home Page</div>} />
-          <Route path="login" element={<Login />} />
-          <Route path="profile" element={<Profile />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Provider store={appStore}>
+      <BrowserRouter basename="/">
+        <Routes>
+
+          <Route path="/" element={<Body />}>
+
+            <Route index element={<div>Home Page</div>} />
+            <Route path="login" element={<Login />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
