@@ -22,18 +22,23 @@ const NavBar = () => {
             )}
 
             {user && (
-                <div className="flex-none gap-2">
+                <div className="flex flex-col items-center gap-2">
+
+                    <p className="text-lg font-semibold">
+                        Welcome, {user.firstName}
+                    </p>
+
+                    {/* Avatar */}
                     <div className="dropdown dropdown-end">
                         <div
                             tabIndex={0}
                             role="button"
                             className="btn btn-ghost btn-circle avatar"
                         >
-                            <div className="w-10 rounded-full">
+                            <div className="w-12 rounded-full">
                                 <img
                                     alt="avatar"
-                                    src={user.photoUrl
-                                    }
+                                    src={user.photoUrl}
                                 />
                             </div>
                         </div>
@@ -47,8 +52,10 @@ const NavBar = () => {
                             <li><a>Logout</a></li>
                         </ul>
                     </div>
+
                 </div>
             )}
+
         </div>
     )
 }

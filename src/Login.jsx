@@ -2,12 +2,14 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "./utils/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [emailId, setEmailId] = useState("");
     const [password, setPassword] = useState("");
 
     const dispatch = useDispatch();
+    const navigate = useNavigate()
 
     const handlelogin = async () => {
         if (!emailId || !password) {
@@ -32,7 +34,7 @@ const Login = () => {
 
             dispatch(addUser(res.data.data));
 
-
+            return navigate("/feed")
 
         } catch (error) {
             console.error("Full error object:", error);
