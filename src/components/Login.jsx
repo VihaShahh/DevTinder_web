@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addUser } from "./utils/userSlice";
+import { addUser } from "../utils/userSlice"
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -38,9 +38,6 @@ const Login = () => {
 
         } catch (error) {
             console.error("Full error object:", error);
-            console.error("Axios error message:", error.message);
-            console.error("Response:", error.response);
-            console.error("Request:", error.request);
 
         }
     };
@@ -48,7 +45,7 @@ const Login = () => {
     return (
         <div className="flex justify-center items-center min-h-screen bg-base-300 px-4">
             <div className="card bg-base-100 w-96 shadow-xl border border-base-300">
-                <div className="card-body">
+                <div className="card-">
                     <div className="w-full flex justify-center">
                         <h2 className="text-2xl font-semibold">Login</h2>
                     </div>

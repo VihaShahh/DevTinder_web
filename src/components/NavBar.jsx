@@ -28,7 +28,6 @@ const NavBar = () => {
                         Welcome, {user.firstName}
                     </p>
 
-                    {/* Avatar */}
                     <div className="dropdown dropdown-end">
                         <div
                             tabIndex={0}
