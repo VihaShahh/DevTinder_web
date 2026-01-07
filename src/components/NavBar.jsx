@@ -1,9 +1,26 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import axios from 'axios';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
-    const user = useSelector((state) => state.user)
+    const user = useSelector((state) => state.user);
+
+    const handleLogout = async () => {
+        try {
+            await axios.post(
+                "/api/logout",
+                {},
+                { withCredentials: true }
+            );
+
+            // Optional: refresh page or redirect
+            window.location.href = "/login";
+
+        } catch (err) {
+            console.error("Logout failed:", err);
+        }
+    };
 
     return (
         <div className="navbar bg-neutral text-neutral-content shadow-sm">
@@ -48,15 +65,14 @@ const NavBar = () => {
                         >
                             <li><Link to="/profile">Profile</Link></li>
                             <li><a>Settings</a></li>
-                            <li><a>Logout</a></li>
+                            <li><a onClick={handleLogout}>Logout</a></li>
                         </ul>
                     </div>
 
                 </div>
             )}
-
         </div>
-    )
-}
+    );
+};
 
-export default NavBar
+export default NavBar;
