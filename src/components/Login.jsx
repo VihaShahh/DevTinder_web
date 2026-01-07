@@ -1,27 +1,27 @@
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addUser } from "../utils/userSlice"
+import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [emailId, setEmailId] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
 
     const dispatch = useDispatch();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    const handlelogin = async () => {
+    const handleLogin = async () => {
+        setErrorMsg(""); 
         if (!emailId || !password) {
-            alert("Please enter both email and password");
+            setErrorMsg("Please enter both email and password");
             return;
         }
 
         try {
-            const backendUrl = "/api/login";
-
             const res = await axios.post(
-                backendUrl,
+                "/api/login",
                 { emailId, password },
                 {
                     withCredentials: true,
@@ -33,19 +33,23 @@ const Login = () => {
             );
 
             dispatch(addUser(res.data.data));
-
-            return navigate("/feed")
+            navigate("/feed");
 
         } catch (error) {
-            console.error("Full error object:", error);
+            console.error("Login error:", error);
 
+            if (error.response?.data?.message) {
+                setErrorMsg(error.response.data.message);
+            } else {
+                setErrorMsg("Login failed. Please try again.");
+            }
         }
     };
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-base-300 px-4">
             <div className="card bg-base-100 w-96 shadow-xl border border-base-300">
-                <div className="card-">
+                <div className="card-body">
                     <div className="w-full flex justify-center">
                         <h2 className="text-2xl font-semibold">Login</h2>
                     </div>
@@ -72,9 +76,12 @@ const Login = () => {
                         />
                     </fieldset>
 
+                    {errorMsg && (
+                        <p className="text-red-500 text-sm mt-2">{errorMsg}</p>
+                    )}
 
                     <div className="card-actions mt-6">
-                        <button className="btn btn-primary w-full" onClick={handlelogin}>
+                        <button className="btn btn-primary w-full" onClick={handleLogin}>
                             Login
                         </button>
                     </div>
