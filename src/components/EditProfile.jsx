@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const EditProfile = ({ user }) => {
     const [firstName, setFirstName] = useState(user.firstName || "");
@@ -8,17 +11,27 @@ const EditProfile = ({ user }) => {
     const [about, setAbout] = useState(user.about || "");
     const [photoUrl, setPhotoUrl] = useState(user.photoUrl || "");
     const [skills] = useState(user.skills || []);
+    const [showToast, setShowToast] = useState(false);
+    const dispatch = useDispatch();
 
-    const handleSave = () => {
-        console.log("Profile Updated:", {
-            firstName,
-            lastName,
-            age,
-            gender,
-            about,
-            photoUrl,
-            skills
-        });
+    const saveProfile = async () => {
+        try {
+            const res = await axios.patch(
+                "/api/profile/update",
+                { firstName, lastName, age, gender, about, photoUrl },
+                { withCredentials: true }
+            );
+
+            dispatch(addUser(res.data.data));
+
+
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 2000);
+
+            console.log("Saved successfully", res.data);
+        } catch (err) {
+            console.error("Error saving profile:", err);
+        }
     };
 
     return (
@@ -26,99 +39,104 @@ const EditProfile = ({ user }) => {
             <div className="flex flex-col md:flex-row gap-10 w-full max-w-6xl">
 
 
-                <div className="card w-full md:w-1/2 bg-base-100 shadow-2xl border border-base-300 rounded-2xl backdrop-blur-xl">
-                    <div className="card-body space-y-4">
-                        <h2 className="text-3xl font-bold text-center pb-2 tracking-wide">
-                            Edit Profile
-                        </h2>
+                <div className="w-full md:w-1/2 flex flex-col items-center">
+
+                   
+                    {showToast && (
+                        <div className="mb-4 w-full flex justify-center">
+                            <div className="alert alert-success shadow-lg rounded-xl text-center max-w-md">
+                                <span className="font-semibold">Profile saved successfully!</span>
+                            </div>
+                        </div>
+                    )}
 
 
-                        <fieldset className="fieldset">
-                            <legend className="fieldset-legend text-sm font-semibold opacity-80">First Name</legend>
-                            <input
-                                type="text"
-                                value={firstName}
-                                className="input input-bordered w-full rounded-xl"
-                                placeholder="Enter your first name"
-                                onChange={(e) => setFirstName(e.target.value)}
-                            />
-                        </fieldset>
+                    <div className="card w-full bg-base-100 shadow-2xl border border-base-300 rounded-2xl backdrop-blur-xl">
+                        <div className="card-body space-y-4">
+                            <h2 className="text-3xl font-bold text-center pb-2 tracking-wide">Edit Profile</h2>
 
+                            <fieldset className="fieldset">
+                                <legend className="fieldset-legend text-sm font-semibold opacity-80">First Name</legend>
+                                <input
+                                    type="text"
+                                    value={firstName}
+                                    className="input input-bordered w-full rounded-xl"
+                                    placeholder="Enter your first name"
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                />
+                            </fieldset>
 
-                        <fieldset className="fieldset">
-                            <legend className="fieldset-legend text-sm font-semibold opacity-80">Last Name</legend>
-                            <input
-                                type="text"
-                                value={lastName}
-                                className="input input-bordered w-full rounded-xl"
-                                placeholder="Enter your last name"
-                                onChange={(e) => setLastName(e.target.value)}
-                            />
-                        </fieldset>
+                            <fieldset className="fieldset">
+                                <legend className="fieldset-legend text-sm font-semibold opacity-80">Last Name</legend>
+                                <input
+                                    type="text"
+                                    value={lastName}
+                                    className="input input-bordered w-full rounded-xl"
+                                    placeholder="Enter your last name"
+                                    onChange={(e) => setLastName(e.target.value)}
+                                />
+                            </fieldset>
 
+                            <fieldset className="fieldset">
+                                <legend className="fieldset-legend text-sm font-semibold opacity-80">Age</legend>
+                                <input
+                                    type="number"
+                                    value={age}
+                                    className="input input-bordered w-full rounded-xl"
+                                    placeholder="Enter your age"
+                                    onChange={(e) => setAge(e.target.value)}
+                                />
+                            </fieldset>
 
-                        <fieldset className="fieldset">
-                            <legend className="fieldset-legend text-sm font-semibold opacity-80">Age</legend>
-                            <input
-                                type="number"
-                                value={age}
-                                className="input input-bordered w-full rounded-xl"
-                                placeholder="Enter your age"
-                                onChange={(e) => setAge(e.target.value)}
-                            />
-                        </fieldset>
+                            <fieldset className="fieldset">
+                                <legend className="fieldset-legend text-sm font-semibold opacity-80">Gender</legend>
+                                <select
+                                    className="select select-bordered w-full rounded-xl"
+                                    value={gender}
+                                    onChange={(e) => setGender(e.target.value)}
+                                >
+                                    <option value="">Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </fieldset>
 
+                            <fieldset className="fieldset">
+                                <legend className="fieldset-legend text-sm font-semibold opacity-80">Photo URL</legend>
+                                <input
+                                    type="text"
+                                    value={photoUrl}
+                                    className="input input-bordered w-full rounded-xl"
+                                    placeholder="Enter a photo URL"
+                                    onChange={(e) => setPhotoUrl(e.target.value)}
+                                />
+                            </fieldset>
 
-                        <fieldset className="fieldset">
-                            <legend className="fieldset-legend text-sm font-semibold opacity-80">Gender</legend>
-                            <select
-                                className="select select-bordered w-full rounded-xl"
-                                value={gender}
-                                onChange={(e) => setGender(e.target.value)}
+                            <fieldset className="fieldset">
+                                <legend className="fieldset-legend text-sm font-semibold opacity-80">About</legend>
+                                <textarea
+                                    className="textarea textarea-bordered w-full rounded-xl h-28"
+                                    placeholder="Write something about yourself..."
+                                    value={about}
+                                    onChange={(e) => setAbout(e.target.value)}
+                                ></textarea>
+                            </fieldset>
+
+                            <button
+                                className="btn btn-primary w-full rounded-xl mt-3 text-white font-semibold"
+                                onClick={saveProfile}
                             >
-                                <option value="">Select gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </fieldset>
-
-
-                        <fieldset className="fieldset">
-                            <legend className="fieldset-legend text-sm font-semibold opacity-80">Photo URL</legend>
-                            <input
-                                type="text"
-                                value={photoUrl}
-                                className="input input-bordered w-full rounded-xl"
-                                placeholder="Enter a photo URL"
-                                onChange={(e) => setPhotoUrl(e.target.value)}
-                            />
-                        </fieldset>
-
-                        <fieldset className="fieldset">
-                            <legend className="fieldset-legend text-sm font-semibold opacity-80">About</legend>
-                            <textarea
-                                className="textarea textarea-bordered w-full rounded-xl h-28"
-                                placeholder="Write something about yourself..."
-                                value={about}
-                                onChange={(e) => setAbout(e.target.value)}
-                            ></textarea>
-                        </fieldset>
-
-                        <button
-                            className="btn btn-primary w-full rounded-xl mt-3 text-white font-semibold"
-                            onClick={handleSave}
-                        >
-                            Save Profile
-                        </button>
+                                Save Profile
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-
+                
                 <div className="w-full md:w-1/2 flex justify-center items-start">
                     <div className="card bg-base-100 w-96 shadow-2xl rounded-2xl border border-base-300 
-                        hover:shadow-[0_0_25px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300">
-
+                hover:shadow-[0_0_25px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300">
                         <figure className="rounded-t-2xl overflow-hidden">
                             <img
                                 src={photoUrl || "https://via.placeholder.com/300"}
@@ -140,7 +158,6 @@ const EditProfile = ({ user }) => {
                                 </p>
                             )}
 
-
                             <p className="opacity-80">{about || "This user has no description."}</p>
 
                             {skills?.length > 0 && (
@@ -161,7 +178,6 @@ const EditProfile = ({ user }) => {
                                 <button className="btn btn-primary rounded-xl text-white">Interested</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
