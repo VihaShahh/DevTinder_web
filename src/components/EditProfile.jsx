@@ -1,40 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const EditProfile = ({ user }) => {
     const [firstName, setFirstName] = useState(user.firstName || "");
     const [lastName, setLastName] = useState(user.lastName || "");
     const [age, setAge] = useState(user.age || "");
-    const [gender, setGender] = useState(user.gender || "");
+    const [gender, setGender] = useState(user.gender?.toLowerCase() || "");
     const [about, setAbout] = useState(user.about || "");
     const [photoUrl, setPhotoUrl] = useState(user.photoUrl || "");
-    const [errorMsg, setErrorMsg] = useState("");
+    const [skills] = useState(user.skills || []);
 
     const handleSave = () => {
-        if (!firstName || !lastName || !age || !gender || !about || !photoUrl) {
-            setErrorMsg("Please fill all fields");
-            return;
-        }
-
-        setErrorMsg("");
-
         console.log("Profile Updated:", {
             firstName,
             lastName,
             age,
             gender,
             about,
-            photoUrl
+            photoUrl,
+            skills
         });
     };
 
     return (
-        <>
-            <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-black px-4 py-10 flex justify-center items-start">
+        <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-black px-4 py-10 flex justify-center items-start">
+            <div className="flex flex-col md:flex-row gap-10 w-full max-w-6xl">
 
-                <div className="card w-full max-w-md bg-base-100 shadow-2xl border border-base-300 rounded-2xl backdrop-blur-xl">
+
+                <div className="card w-full md:w-1/2 bg-base-100 shadow-2xl border border-base-300 rounded-2xl backdrop-blur-xl">
                     <div className="card-body space-y-4">
-
-
                         <h2 className="text-3xl font-bold text-center pb-2 tracking-wide">
                             Edit Profile
                         </h2>
@@ -45,7 +38,7 @@ const EditProfile = ({ user }) => {
                             <input
                                 type="text"
                                 value={firstName}
-                                className="input input-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
+                                className="input input-bordered w-full rounded-xl"
                                 placeholder="Enter your first name"
                                 onChange={(e) => setFirstName(e.target.value)}
                             />
@@ -57,7 +50,7 @@ const EditProfile = ({ user }) => {
                             <input
                                 type="text"
                                 value={lastName}
-                                className="input input-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
+                                className="input input-bordered w-full rounded-xl"
                                 placeholder="Enter your last name"
                                 onChange={(e) => setLastName(e.target.value)}
                             />
@@ -69,7 +62,7 @@ const EditProfile = ({ user }) => {
                             <input
                                 type="number"
                                 value={age}
-                                className="input input-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
+                                className="input input-bordered w-full rounded-xl"
                                 placeholder="Enter your age"
                                 onChange={(e) => setAge(e.target.value)}
                             />
@@ -79,14 +72,14 @@ const EditProfile = ({ user }) => {
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend text-sm font-semibold opacity-80">Gender</legend>
                             <select
-                                className="select select-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
+                                className="select select-bordered w-full rounded-xl"
                                 value={gender}
                                 onChange={(e) => setGender(e.target.value)}
                             >
                                 <option value="">Select gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
                             </select>
                         </fieldset>
 
@@ -96,40 +89,84 @@ const EditProfile = ({ user }) => {
                             <input
                                 type="text"
                                 value={photoUrl}
-                                className="input input-bordered w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
+                                className="input input-bordered w-full rounded-xl"
                                 placeholder="Enter a photo URL"
                                 onChange={(e) => setPhotoUrl(e.target.value)}
                             />
                         </fieldset>
 
-
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend text-sm font-semibold opacity-80">About</legend>
                             <textarea
-                                className="textarea textarea-bordered w-full rounded-xl h-28 focus:outline-none focus:ring-2 focus:ring-primary"
+                                className="textarea textarea-bordered w-full rounded-xl h-28"
                                 placeholder="Write something about yourself..."
                                 value={about}
                                 onChange={(e) => setAbout(e.target.value)}
                             ></textarea>
                         </fieldset>
 
-
-                        {errorMsg && (
-                            <p className="text-red-500 text-sm mt-1">{errorMsg}</p>
-                        )}
-
                         <button
-                            className="btn btn-primary w-full rounded-xl mt-3 text-white font-semibold tracking-wide 
-                        hover:scale-[1.02] active:scale-[0.98] transition-transform duration-200 shadow-md"
+                            className="btn btn-primary w-full rounded-xl mt-3 text-white font-semibold"
                             onClick={handleSave}
                         >
                             Save Profile
                         </button>
                     </div>
                 </div>
-            </div>
 
-        </>
+
+                <div className="w-full md:w-1/2 flex justify-center items-start">
+                    <div className="card bg-base-100 w-96 shadow-2xl rounded-2xl border border-base-300 
+                        hover:shadow-[0_0_25px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300">
+
+                        <figure className="rounded-t-2xl overflow-hidden">
+                            <img
+                                src={photoUrl || "https://via.placeholder.com/300"}
+                                alt={`${firstName} ${lastName}`}
+                                className="w-full h-64 object-cover"
+                            />
+                        </figure>
+
+                        <div className="card-body space-y-3">
+                            <h2 className="card-title text-2xl font-bold">
+                                {firstName || "User"} {lastName || "Name"}
+                            </h2>
+
+                            {(age || gender) && (
+                                <p className="text-sm opacity-70">
+                                    {age && age}
+                                    {age && gender ? " • " : ""}
+                                    {gender && gender.charAt(0).toUpperCase() + gender.slice(1)}
+                                </p>
+                            )}
+
+
+                            <p className="opacity-80">{about || "This user has no description."}</p>
+
+                            {skills?.length > 0 && (
+                                <div>
+                                    <h3 className="font-semibold">Skills</h3>
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        {skills.map((skill, index) => (
+                                            <span key={index} className="badge badge-primary badge-outline px-3 py-1 rounded-full">
+                                                {skill}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="card-actions justify-center mt-4 gap-5">
+                                <button className="btn btn-outline btn-error rounded-xl">Ignore</button>
+                                <button className="btn btn-primary rounded-xl text-white">Interested</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
     );
 };
 
