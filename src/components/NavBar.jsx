@@ -14,7 +14,7 @@ const NavBar = () => {
                 { withCredentials: true }
             );
 
-            // Optional: refresh page or redirect
+
             window.location.href = "/login";
 
         } catch (err) {

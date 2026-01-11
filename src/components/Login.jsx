@@ -13,7 +13,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     const handleLogin = async () => {
-        setErrorMsg(""); 
+        setErrorMsg("");
         if (!emailId || !password) {
             setErrorMsg("Please enter both email and password");
             return;
@@ -47,7 +47,9 @@ const Login = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-base-300 px-4">
+        <div className="flex justify-center items-center min-h-screen 
+bg-gradient-to-br from-gray-800 via-gray-900 to-black px-4">
+
             <div className="card bg-base-100 w-96 shadow-xl border border-base-300">
                 <div className="card-body">
                     <div className="w-full flex justify-center">
