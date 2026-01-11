@@ -10,8 +10,6 @@ const Feed = () => {
     const getFeed = async () => {
         try {
             const res = await axios.get("/api/feed", { withCredentials: true });
-            console.log("API RESPONSE:", res.data);
-
             dispatch(addFeed(res.data.users));
         } catch (error) {
             console.error("Error fetching feed:", error);
@@ -36,7 +34,7 @@ const Feed = () => {
                 hover:shadow-[0_0_25px_rgba(0,0,0,0.4)] 
                 hover:-translate-y-1 transition-all duration-300"
                 >
-                    {/* User Photo */}
+
                     <figure className="rounded-t-2xl overflow-hidden">
                         <img
                             src={user.photoUrl || "https://via.placeholder.com/300"}
@@ -45,7 +43,7 @@ const Feed = () => {
                         />
                     </figure>
 
-                    {/* Card Body */}
+
                     <div className="card-body space-y-3">
 
                         <h2 className="card-title text-2xl font-bold">
@@ -56,7 +54,6 @@ const Feed = () => {
                             {user.about || "This user has no description."}
                         </p>
 
-                        {/* Skills */}
                         {user.skills && user.skills.length > 0 && (
                             <div>
                                 <h3 className="font-semibold">Skills</h3>
@@ -73,7 +70,7 @@ const Feed = () => {
                             </div>
                         )}
 
-                        {/* Buttons */}
+
                         <div className="card-actions justify-center mt-4 gap-5">
 
                             <button className="btn btn-outline btn-error rounded-xl 

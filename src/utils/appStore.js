@@ -5,7 +5,7 @@ import feedReducer from "./feedSlice";  // import your feed slice
 const appStore = configureStore({
     reducer: {
         user: userReducer,
-        feed: feedReducer,   // ✅ key must match useSelector in Feed.jsx
+        feed: feedReducer,
     }
 });
 
