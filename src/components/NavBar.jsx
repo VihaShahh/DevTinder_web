@@ -23,9 +23,16 @@ const NavBar = () => {
     return (
         <div className="navbar bg-neutral text-neutral-content shadow-sm">
             <div className="flex-1">
-                <Link to="/" className="btn btn-ghost text-xl text-neutral-content">
-                    👩‍💻 DevTinder
-                </Link>
+                {user ? (
+                    <Link to="/" className="btn btn-ghost text-xl text-neutral-content">
+                        👩‍💻 DevTinder
+                    </Link>
+                ) : (
+                    <span className="btn btn-ghost text-xl text-neutral-content cursor-default">
+                        👩‍💻 DevTinder
+                    </span>
+                )}
+
             </div>
 
             {!user && (
