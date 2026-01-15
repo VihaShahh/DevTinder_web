@@ -60,9 +60,18 @@ const Connections = () => {
                                 <h2 className="text-xl font-semibold">
                                     {user.firstName} {user.lastName}
                                 </h2>
-                                <p className="text-sm text-gray-400">{user.gender}</p>
+
+                                {(user.gender || user.age) && (
+                                    <p className="text-sm text-gray-400">
+                                        {user.age ? user.age : ""}
+                                        {user.age && user.gender ? " · " : ""}
+                                        {user.gender ? user.gender : ""}
+                                    </p>
+                                )}
+
                             </div>
                         </div>
+
 
                         {user.about && (
                             <p className="text-gray-300 mt-3 text-sm leading-relaxed">
