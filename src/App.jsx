@@ -9,6 +9,7 @@ import EditProfile from "./components/EditProfile";
 import UserCard from "./components/UserCard";
 import { Provider, useSelector } from "react-redux";
 import appStore from "./utils/appStore";
+import Requests from "./components/Requests";
 
 const AppRoutes = () => {
   const user = useSelector((state) => state.user);
@@ -16,6 +17,8 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Body />}>
+
+        {/* Home route */}
         <Route
           index
           element={
@@ -26,7 +29,7 @@ const AppRoutes = () => {
                 flex justify-center items-start
                 p-6
                 overflow-y-auto
-                pb-32   /* <-- This is the extra bottom padding */
+                pb-32
               "
             >
               <UserCard user={user} />
@@ -39,7 +42,7 @@ const AppRoutes = () => {
         <Route path="profile" element={<Profile />} />
         <Route path="connections" element={<Connections />} />
         <Route path="edit-profile" element={<EditProfile user={user} />} />
-
+        <Route path="requests" element={<Requests />} />
       </Route>
     </Routes>
   );
