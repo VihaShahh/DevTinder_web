@@ -1,9 +1,26 @@
+import axios from "axios";
 import React from "react";
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, onAction }) => {
+
+    const handleSendRequest = async (status) => {
+        try {
+            await axios.post(
+                `/api/request/send/${status}/${user._id}`,
+                {},
+                { withCredentials: true }
+            );
+            console.log("Request sent:", status);
+
+            onAction(user._id);
+        } catch (err) {
+            console.error("Error sending request:", err);
+        }
+    };
+
     return (
-        <div className="card bg-base-100 w-96 shadow-2xl rounded-2xl border border-base-300 
-                    hover:shadow-[0_0_25px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300">
+        <div className="card bg-base-100 w-96 shadow-2xl rounded-2xl border border-base-300
+            hover:shadow-[0_0_25px_rgba(0,0,0,0.4)] transition-all duration-300">
 
             <figure className="rounded-t-2xl overflow-hidden">
                 <img
@@ -14,20 +31,22 @@ const UserCard = ({ user }) => {
             </figure>
 
             <div className="card-body space-y-3">
-
                 <h2 className="card-title text-2xl font-bold">
-                    {user?.firstName || "User"} {user?.lastName || "Name"}
+                    {user?.firstName} {user?.lastName}
                 </h2>
 
                 {(user?.age || user?.gender) && (
                     <p className="text-sm opacity-70">
-                        {user?.age && user.age}
+                        {user?.age}
                         {user?.age && user?.gender ? " • " : ""}
-                        {user?.gender && user.gender.charAt(0).toUpperCase() + user.gender.slice(1)}
+                        {user?.gender &&
+                            user.gender.charAt(0).toUpperCase() + user.gender.slice(1)}
                     </p>
                 )}
 
-                <p className="opacity-80">{user?.about || "This user has no description."}</p>
+                <p className="opacity-80">
+                    {user?.about || "This user has no description."}
+                </p>
 
                 {user?.skills?.length > 0 && (
                     <div>
@@ -43,10 +62,20 @@ const UserCard = ({ user }) => {
                 )}
 
                 <div className="card-actions justify-center mt-4 gap-5">
-                    <button className="btn btn-outline btn-error rounded-xl">Ignore</button>
-                    <button className="btn btn-primary rounded-xl text-white">Interested</button>
-                </div>
+                    <button
+                        className="btn btn-outline btn-error rounded-xl"
+                        onClick={() => handleSendRequest("ignored")}
+                    >
+                        Ignore
+                    </button>
 
+                    <button
+                        className="btn btn-primary rounded-xl text-white"
+                        onClick={() => handleSendRequest("interested")}
+                    >
+                        Interested
+                    </button>
+                </div>
             </div>
         </div>
     );
