@@ -7,6 +7,22 @@ const Requests = () => {
     const dispatch = useDispatch();
     const requests = useSelector((state) => state.requests ?? []);
 
+    const reviewRequest = async (status, _id) => {
+        try {
+            await axios.post(
+                `/api/request/review/${status}/${_id}`,
+                {},
+                { withCredentials: true }
+            );
+
+            dispatch(setRequests(requests.filter(r => r._id !== _id)));
+
+        } catch (err) {
+            console.error("Error reviewing request:", err);
+        }
+    };
+
+
     useEffect(() => {
         const fetchRequests = async () => {
             try {
@@ -28,8 +44,6 @@ const Requests = () => {
 
         fetchRequests();
     }, [dispatch]);
-
-
 
     if (requests.length === 0) {
         return (
@@ -92,15 +106,21 @@ const Requests = () => {
                             )}
 
                             <div className="flex gap-3 mt-4 justify-center">
-                                <button className="px-4 py-1 rounded-lg bg-purple-600 hover:bg-purple-700">
+                                <button
+                                    onClick={() => reviewRequest("accepted", req._id)}
+                                    className="px-4 py-1 rounded-lg bg-purple-600 hover:bg-purple-700"
+                                >
                                     Accept
                                 </button>
-                                <button className="px-4 py-1 rounded-lg bg-red-600 hover:bg-red-700">
+
+                                <button
+                                    onClick={() => reviewRequest("rejected", req._id)}
+                                    className="px-4 py-1 rounded-lg bg-red-600 hover:bg-red-700"
+                                >
                                     Reject
                                 </button>
                             </div>
                         </div>
-
                     );
                 })}
             </div>
