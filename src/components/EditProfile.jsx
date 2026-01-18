@@ -16,19 +16,26 @@ const EditProfile = ({ user }) => {
 
     const saveProfile = async () => {
         try {
+            const payload = {};
+
+            if (firstName !== user.firstName) payload.firstName = firstName;
+            if (lastName !== user.lastName) payload.lastName = lastName;
+            if (age !== user.age) payload.age = age;
+            if (gender !== (user.gender || "")) payload.gender = gender;
+            if (about !== user.about) payload.about = about;
+            if (photoUrl !== user.photoUrl) payload.photoUrl = photoUrl;
+
             const res = await axios.patch(
                 "/api/profile/update",
-                { firstName, lastName, age, gender, about, photoUrl },
+                payload,
                 { withCredentials: true }
             );
 
             dispatch(addUser(res.data.data));
 
-
             setShowToast(true);
             setTimeout(() => setShowToast(false), 2000);
 
-            console.log("Saved successfully", res.data);
         } catch (err) {
             console.error("Error saving profile:", err);
         }
@@ -41,7 +48,7 @@ const EditProfile = ({ user }) => {
 
                 <div className="w-full md:w-1/2 flex flex-col items-center">
 
-                   
+
                     {showToast && (
                         <div className="mb-4 w-full flex justify-center">
                             <div className="alert alert-success shadow-lg rounded-xl text-center max-w-md">
@@ -133,7 +140,7 @@ const EditProfile = ({ user }) => {
                     </div>
                 </div>
 
-                
+
                 <div className="w-full md:w-1/2 flex justify-center items-start">
                     <div className="card bg-base-100 w-96 shadow-2xl rounded-2xl border border-base-300 
                 hover:shadow-[0_0_25px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300">
