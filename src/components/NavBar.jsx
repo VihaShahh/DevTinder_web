@@ -32,7 +32,7 @@ const NavBar = () => {
             {!user && (
                 <div className="flex-none">
                     <Link to="/login" className="btn btn-primary">
-                        🔑 Login
+                        Login
                     </Link>
                 </div>
             )}
