@@ -69,8 +69,9 @@ const NavBar = () => {
                                 <Link to="/feed">🔥 Feed</Link>
                             </li>
                             <li>
-                                <button>🚪 Logout</button>
+                                <button onClick={handleLogout}>🚪 Logout</button>
                             </li>
+
                         </ul>
                     </div>
                 </div>
