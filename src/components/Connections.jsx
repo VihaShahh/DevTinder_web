@@ -41,7 +41,10 @@ const Connections = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white p-5">
-            <h1 className="text-3xl font-bold mb-6">Your Connections</h1>
+            <h1 className="text-3xl font-bold mb-6 text-center">
+                Your Connections
+            </h1>
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {connections.map((user) => (
