@@ -12,6 +12,8 @@ const EditProfile = ({ user }) => {
     const [photoUrl, setPhotoUrl] = useState(user.photoUrl || "");
     const [skills] = useState(user.skills || []);
     const [showToast, setShowToast] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
     const dispatch = useDispatch();
 
     const saveProfile = async () => {
@@ -38,6 +40,11 @@ const EditProfile = ({ user }) => {
 
         } catch (err) {
             console.error("Error saving profile:", err);
+
+            const backendMsg = err?.response?.data?.message || "Failed to save profile!";
+            setErrorMessage(backendMsg);
+
+            setTimeout(() => setErrorMessage(""), 3000);
         }
     };
 
@@ -45,9 +52,14 @@ const EditProfile = ({ user }) => {
         <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-black px-4 py-10 flex justify-center items-start">
             <div className="flex flex-col md:flex-row gap-10 w-full max-w-6xl">
 
-
                 <div className="w-full md:w-1/2 flex flex-col items-center">
-
+                    {errorMessage && (
+                        <div className="mb-4 w-full flex justify-center">
+                            <div className="alert alert-error shadow-lg rounded-xl text-center max-w-md">
+                                <span className="font-semibold">{errorMessage}</span>
+                            </div>
+                        </div>
+                    )}
 
                     {showToast && (
                         <div className="mb-4 w-full flex justify-center">
@@ -56,7 +68,6 @@ const EditProfile = ({ user }) => {
                             </div>
                         </div>
                     )}
-
 
                     <div className="card w-full bg-base-100 shadow-2xl border border-base-300 rounded-2xl backdrop-blur-xl">
                         <div className="card-body space-y-4">
@@ -140,10 +151,9 @@ const EditProfile = ({ user }) => {
                     </div>
                 </div>
 
-
                 <div className="w-full md:w-1/2 flex justify-center items-start">
                     <div className="card bg-base-100 w-96 shadow-2xl rounded-2xl border border-base-300 
-                hover:shadow-[0_0_25px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300">
+                        hover:shadow-[0_0_25px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300">
                         <figure className="rounded-t-2xl overflow-hidden">
                             <img
                                 src={photoUrl || "https://via.placeholder.com/300"}
