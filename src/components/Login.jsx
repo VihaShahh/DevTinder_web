@@ -30,7 +30,7 @@ const Login = () => {
             );
 
             dispatch(addUser(res.data.data));
-            navigate("/feed");
+            navigate("/profile");
 
         } catch (error) {
             console.error("Login error:", error);
@@ -54,7 +54,7 @@ const Login = () => {
             );
 
             dispatch(addUser(res.data.data));
-            navigate("/feed");
+            navigate("/profile");
 
         } catch (error) {
             console.error("Signup error:", error);
