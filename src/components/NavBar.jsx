@@ -19,11 +19,18 @@ const NavBar = () => {
         <div className="navbar bg-neutral text-neutral-content shadow-sm px-4">
             <div className="flex-1">
                 {user ? (
-                    <Link to="/" className="btn btn-ghost text-xl text-neutral-content">
+                    <Link
+                        to="/"
+                        className="px-3 py-1 rounded-md bg-white/20 hover:bg-white/30 
+                                   text-xl text-neutral-content transition"
+                    >
                         👩‍💻 DevTinder
                     </Link>
                 ) : (
-                    <span className="btn btn-ghost text-xl text-neutral-content cursor-default">
+                    <span
+                        className="px-3 py-1 rounded-md bg-white/20 
+                                   text-xl text-neutral-content cursor-default"
+                    >
                         👩‍💻 DevTinder
                     </span>
                 )}
@@ -48,30 +55,23 @@ const NavBar = () => {
                             className="btn btn-ghost btn-circle avatar"
                         >
                             <div className="w-12 rounded-full">
-                                <img alt="avatar" src={user.photoUrl || "/default-avatar.png"} />
+                                <img
+                                    alt="avatar"
+                                    src={user.photoUrl || "/default-avatar.png"}
+                                />
                             </div>
                         </div>
 
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-neutral text-neutral-content rounded-box z-50 mt-3 w-52 p-2 shadow"
+                            className="menu menu-sm dropdown-content bg-neutral text-neutral-content
+                                       rounded-box z-50 mt-3 w-52 p-2 shadow"
                         >
-                            <li>
-                                <Link to="/profile">👤 Profile</Link>
-                            </li>
-                            <li>
-                                <Link to="/connections">🤝 Connections</Link>
-                            </li>
-                            <li>
-                                <Link to="/requests">📨 Requests</Link>
-                            </li>
-                            <li>
-                                <Link to="/feed">🔥 Feed</Link>
-                            </li>
-                            <li>
-                                <button onClick={handleLogout}>🚪 Logout</button>
-                            </li>
-
+                            <li><Link to="/profile">👤 Profile</Link></li>
+                            <li><Link to="/connections">🤝 Connections</Link></li>
+                            <li><Link to="/requests">📨 Requests</Link></li>
+                            <li><Link to="/feed">🔥 Feed</Link></li>
+                            <li><button onClick={handleLogout}>🚪 Logout</button></li>
                         </ul>
                     </div>
                 </div>
